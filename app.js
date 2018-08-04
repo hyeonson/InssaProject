@@ -1,5 +1,3 @@
-import { setFlagsFromString } from 'v8';
-
 var express = require('express');
 var http = require('http');
 var static = require('serve-static');
@@ -32,7 +30,7 @@ var userSchema = mongoose.Schema({
 var User = mongoose.model('User',userSchema);
 
 //기본포트를 app 객체에 속성으로 설정
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 8080);
 
 
 //body-parser를 사용해 application/x-www-form-urlencoded 파싱
@@ -57,17 +55,40 @@ app.get('/question', function (req, res) {
     });
 });
 */
-app.post('/question', function (req, res) {
-    var title = req.body.title;
-    var content = req.body.content;
-    var quest = new Quest({title:title, content:content})
-    quest.save(function(err){
-      if (err) console.log(err);
-      res.redirect('http://localhost:3000/question');
-    });
+app.post('/signup', function (req, res) {
+  var inputData;
+  req.on('data', function(data){
+    inputData = JSON.parse(data);
+  });
+  req.on('end', function(){
+    conole.log('noting here');
+  });
+  var user_id = inputData.user_id;
+  var user_pw = inputData.user_pw;
+  var user_name = inputData.user_name;
+  var user_age = inputData.user_age;
+  var user_saying = inputData.user_saying;
+  var user_major = inputData.user_major;
+  var user_sex = inputData.user_sex;
+  var user_grade = inputData.user_grade;
+  var user = new User({user_id:user_id, user_pw:user_pw, user_nama:user_name, user_age:user_age, user_saying:user_saying,
+  user_major:user_major, user_sex:user_sex, user_grade:user_grade})
+  console.log('user_id: ' + user_id);
+  console.log('user_pw: ' + user_pw);
+  console.log('user_name: ' + user_name);
+  console.log('user_age: ' + user_age);
+  console.log('user_saying: ' + user_saying);
+  console.log('user_major: ' + user_major); 
+  console.log('user_sex: ' + user_sex);
+  console.log('user_grade: ' + user_grade);
+  user.save(function(err){
+    if (err) console.log(err);
+    res.write('111');
+    res.end();
+  });
 });
 
 //Express 서버 시작
 http.createServer(app).listen(app.get('port'), function () {
     console.log('Express 서버를 시작했습니다. : ' + app.get('port'));
-  });
+});

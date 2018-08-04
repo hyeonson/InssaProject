@@ -1,5 +1,6 @@
 package project.hs.inssaproject;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -59,8 +60,6 @@ public class signup extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-
-        Spinner s = (Spinner)findViewById(R.id.spinner);
         image_select = (ImageView) findViewById(R.id.image_select);
         signup_btn = (Button)findViewById(R.id.signup_btn);
         back_btn = (Button)findViewById(R.id.back_btn);
@@ -74,7 +73,15 @@ public class signup extends AppCompatActivity {
         signup_sex = (RadioGroup)findViewById(R.id.signup_sex);
         signup_grade = (Spinner)findViewById(R.id.grade);
 
-        s.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        signup_grade.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        });
+        signup_major.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
@@ -86,11 +93,7 @@ public class signup extends AppCompatActivity {
         signup_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new JSONTask().execute("http://localhost:3000/signup");
-
-                Intent intent_login = new Intent(signup.this, login.class);
-                startActivity(intent_login);
-                finish();
+                new JSONTask().execute("http://192.168.181.122:8080/signup");
             }
         });
         back_btn.setOnClickListener(new View.OnClickListener() {
@@ -118,9 +121,8 @@ public class signup extends AppCompatActivity {
                 final String str_sex = ((RadioButton)findViewById(signup_sex.getCheckedRadioButtonId())).getText().toString();
                 final String str_grade = signup_grade.getSelectedItem().toString();
 
-                Log.d("[test]", null);
-                Log.d("str_major: ", str_major);
-                Log.d("str_sex: ", str_sex);
+                Log.d("str_major", str_major);
+                Log.d("str_sex", str_sex);
 
                 //JSONObject를 만들고 key value 형식으로 값을 저장해준다.
                 JSONObject jsonObject = new JSONObject();
@@ -137,7 +139,7 @@ public class signup extends AppCompatActivity {
                 BufferedReader reader = null;
 
                 try{
-                    //URL url = new URL("http://192.168.25.16:3000/users");
+                    //URL url = new URL("http://192.168.181.122:8080/signup");
                     URL url = new URL(urls[0]);
                     //연결을 함
                     con = (HttpURLConnection) url.openConnection();
@@ -155,6 +157,7 @@ public class signup extends AppCompatActivity {
                     //버퍼를 생성하고 넣음
                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
                     writer.write(jsonObject.toString());
+                    Log.d("jsonObject", jsonObject.toString());
                     writer.flush();
                     writer.close();//버퍼를 받아줌
 
@@ -198,7 +201,13 @@ public class signup extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            //tvData.setText(result);//서버로 부터 받은 값을 출력해주는 부
+            if(result.equals("111")){
+                Intent intent_login = new Intent(signup.this, login.class);
+                startActivity(intent_login);
+                finish();
+            }
+            else{
+            }
         }
     }
 
