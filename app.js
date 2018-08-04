@@ -1,3 +1,5 @@
+import { setFlagsFromString } from 'v8';
+
 var express = require('express');
 var http = require('http');
 var static = require('serve-static');
@@ -17,13 +19,17 @@ db.once('open', function(){
     console.log("Connected to mongod server");
 });
 
-var questSchema = mongoose.Schema({
-  title: String,
-  content: String,
-  date:{type:Date, default: Date.now}
+var userSchema = mongoose.Schema({
+  user_id: String,
+  user_pw: String,
+  user_name: String,
+  user_age: String,
+  user_saying: String,
+  user_major: String,
+  user_sex: String,
+  user_grade: String
 });
-
-var Quest = mongoose.model('Quest',questSchema);
+var User = mongoose.model('User',userSchema);
 
 //기본포트를 app 객체에 속성으로 설정
 app.set('port', process.env.PORT || 3000);
@@ -36,18 +42,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //app.use(static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'public')));
-app.set('view engine', 'jade')
-app.set('views', './views')
+//app.use(express.static(path.join(__dirname, 'public')));
+//app.set('view engine', 'jade')
+//app.set('views', './views')
 
-app.get('/', function (req, res) {
-    res.render('index.jade');
-  });
-  
-app.get('/menu', function (req, res) {
-    res.render('menu.jade');
-});
 
+/*
 app.get('/question', function (req, res) {
     Quest.find({}).sort({date:-1}).exec(function(err, rawContents){
       // db에서 날짜 순으로 데이터들을 가져옴
@@ -56,6 +56,7 @@ app.get('/question', function (req, res) {
        // board.ejs의 title변수엔 “Board”를, contents변수엔 db 검색 결과 json 데이터를 저장해줌.
     });
 });
+*/
 app.post('/question', function (req, res) {
     var title = req.body.title;
     var content = req.body.content;
