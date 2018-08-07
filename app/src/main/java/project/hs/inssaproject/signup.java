@@ -93,7 +93,7 @@ public class signup extends AppCompatActivity {
         signup_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new JSONTask().execute("http://192.168.181.122:8080/signup");
+                new JSONTask().execute("http://54.180.32.249:3000/signup");
             }
         });
         back_btn.setOnClickListener(new View.OnClickListener() {
