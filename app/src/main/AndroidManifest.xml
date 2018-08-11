@@ -26,7 +26,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".login" />
-        <activity android:name=".signup"></activity>
+        <activity android:name=".signup" />
+        <activity android:name=".profiles" />
+        <activity android:name=".chattingList" />
+        <activity android:name=".board" />
+        <activity android:name=".setting"></activity>
     </application>
 
 </manifest>
