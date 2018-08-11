@@ -133,13 +133,13 @@ public class signup extends AppCompatActivity {
                 jsonObject.accumulate("user_saying", str_saying);
                 jsonObject.accumulate("user_major", str_major);
                 jsonObject.accumulate("user_sex", str_sex);
-                jsonObject.accumulate("uesr_grade", str_grade);
+                jsonObject.accumulate("user_grade", str_grade);
 
                 HttpURLConnection con = null;
                 BufferedReader reader = null;
 
                 try{
-                    //URL url = new URL("http://192.168.181.122:8080/signup");
+                    //URL url = new URL("http://54.180.32.249:3000/signup");
                     URL url = new URL(urls[0]);
                     //연결을 함
                     con = (HttpURLConnection) url.openConnection();
@@ -207,6 +207,7 @@ public class signup extends AppCompatActivity {
                 finish();
             }
             else{
+                //예외처리
             }
         }
     }
