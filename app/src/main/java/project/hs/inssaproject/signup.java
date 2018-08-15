@@ -115,11 +115,11 @@ public class signup extends AppCompatActivity {
                 final String str_pw = signup_pw.getText().toString();
                 final String str_pw2 = signup_pw2.getText().toString();
                 final String str_name = signup_name.getText().toString();
-                final String str_age = signup_age.getText().toString();
+                final int int_age = Integer.parseInt(signup_age.getText().toString());
                 final String str_saying = signup_saying.getText().toString();
                 final String str_major = signup_major.getSelectedItem().toString();
                 final String str_sex = ((RadioButton)findViewById(signup_sex.getCheckedRadioButtonId())).getText().toString();
-                final String str_grade = signup_grade.getSelectedItem().toString();
+                final int int_grade = Integer.parseInt(signup_grade.getSelectedItem().toString());
 
                 Log.d("str_major", str_major);
                 Log.d("str_sex", str_sex);
@@ -129,11 +129,11 @@ public class signup extends AppCompatActivity {
                 jsonObject.accumulate("user_id", str_id);
                 jsonObject.accumulate("user_pw", str_pw);
                 jsonObject.accumulate("user_name", str_name);
-                jsonObject.accumulate("user_age", str_age);
+                jsonObject.accumulate("user_age", int_age);
                 jsonObject.accumulate("user_saying", str_saying);
                 jsonObject.accumulate("user_major", str_major);
                 jsonObject.accumulate("user_sex", str_sex);
-                jsonObject.accumulate("user_grade", str_grade);
+                jsonObject.accumulate("user_grade", int_grade);
 
                 HttpURLConnection con = null;
                 BufferedReader reader = null;

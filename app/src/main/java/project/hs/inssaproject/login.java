@@ -56,11 +56,12 @@ public class login extends AppCompatActivity {
 
     }
     public class JSONTask extends AsyncTask<String, String, String> {
-
+        String extra_id;
         @Override
         protected String doInBackground(String... urls) {
             try {
                 final String str_id = login_id.getText().toString();
+                extra_id = str_id;
                 final String str_pw = login_pw.getText().toString();
 
                 Log.d("str_id", str_id);
@@ -140,6 +141,7 @@ public class login extends AppCompatActivity {
             if (result.equals("111")) {
                 //로그인 성공 alert message
                 Intent intent_main = new Intent(login.this, MainActivity.class);
+                intent_main.putExtra("user_id", extra_id);
                 startActivity(intent_main);
                 finish();
             } else {

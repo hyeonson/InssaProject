@@ -58,11 +58,10 @@
                 android:text="당신의 멘토: " />
 
             <TextView
-                android:id="@+id/textView12"
+                android:id="@+id/your_mentor"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="0" />
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/textView14"
@@ -107,11 +106,10 @@
                 android:text="당신의 멘티: " />
 
             <TextView
-                android:id="@+id/textView16"
+                android:id="@+id/your_mentee"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="0" />
+                android:layout_weight="1" />
 
             <TextView
                 android:id="@+id/textView17"
@@ -156,11 +154,10 @@
                 android:text=" 당신의 사회적 능력 수치 : " />
 
             <TextView
-                android:id="@+id/textView19"
+                android:id="@+id/your_inssa"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="0" />
+                android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
@@ -175,35 +172,35 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/btn_home"
             android:layout_width="70dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="홈" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btn_profiles"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="프로필들" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/btn_chatting"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="채팅" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/btn_board"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:text="게시판" />
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/btn_setting"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
