@@ -42,7 +42,8 @@
         <activity android:name=".profiles" />
         <activity android:name=".chattingList" />
         <activity android:name=".board" />
-        <activity android:name=".setting"></activity>
+        <activity android:name=".setting" />
+        <activity android:name=".profiles2" />
     </application>
 
 </manifest>

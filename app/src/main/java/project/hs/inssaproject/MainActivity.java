@@ -1,39 +1,32 @@
 package project.hs.inssaproject;
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     Intent intent;
     public static String user_id;
     TextView your_mentor;
     TextView your_mentee;
-    TextView your_inssa;
-    Button btn_home;
-    Button btn_profiles;
-    Button btn_chatting;
-    Button btn_board;
-    Button btn_setting;
+    ImageButton btn_home;
+    ImageButton btn_profiles;
+    ImageButton btn_chatting;
+    ImageButton btn_board;
+    ImageButton btn_setting;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,16 +34,16 @@ public class MainActivity extends AppCompatActivity {
 
         intent = getIntent();
         user_id = intent.getStringExtra("user_id");
-        your_mentor = findViewById(R.id.your_mentor);
-        your_mentee = findViewById(R.id.your_mentee);
-        your_inssa = findViewById(R.id.your_inssa);
-        btn_home = findViewById(R.id.btn_home);
-        btn_chatting = findViewById(R.id.btn_chatting);
-        btn_profiles = findViewById(R.id.btn_profiles);
-        btn_setting = findViewById(R.id.btn_setting);
-        btn_board = findViewById(R.id.btn_board);
+        your_mentor = (TextView)findViewById(R.id.your_mentor);
+        your_mentee = (TextView)findViewById(R.id.your_mentee);
+        btn_home = (ImageButton)findViewById(R.id.btn_home);
+        btn_chatting = (ImageButton)findViewById(R.id.btn_chatting);
+        btn_profiles = (ImageButton)findViewById(R.id.btn_profiles);
+        btn_setting = (ImageButton)findViewById(R.id.btn_setting);
+        btn_board = (ImageButton)findViewById(R.id.btn_board);
 
-        new JSONTask().execute("http://54.180.32.249:3000/main");
+        //new JSONTask().execute("http://54.180.32.249:3000/main");
+        numberSetting();
 
         btn_home.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +86,52 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+    private void numberSetting() {
 
+        final String str_id = user_id;
+
+        Req_number req_number = new Req_number(str_id);
+        Retrofit retrofit =new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(ApiService.BASEURL)
+                .build();
+        ApiService apiService = retrofit.create(ApiService.class);
+        Call<Res_number> res = apiService.numberSetting(req_number);
+        res.enqueue(new Callback<Res_number>() {
+            @Override
+            public void onResponse(Call<Res_number> call, Response<Res_number> response) {
+                if(response.isSuccessful()){
+                    if(response.body() != null) {
+                        Log.d("getMentor", Integer.toString(response.body().getMentor()));
+                        Log.d("getMentee", Integer.toString(response.body().getMentee()));
+                        your_mentor.setText(Integer.toString(response.body().getMentor()));
+                        your_mentee.setText(Integer.toString(response.body().getMentee()));
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Res_number> call, Throwable t) {
+
+            }
+        });
+        /*
+        call.enqueue(new Callback<Res_join>() {
+            @Override
+            public void onResponse(Call<Res_join> call, Response<Res_join> response) {
+                if (response.isSuccessful()) {
+                    Intent intent_login = new Intent(signup.this, login.class);
+                    startActivity(intent_login);
+                    finish();
+                }
+            }
+            @Override
+            public void onFailure(Call<Res_join> call, Throwable t) {
+                Log.e("업로드 실패", t.getLocalizedMessage());
+            }
+        });
+        */
+    }
+    /*
     public class JSONTask extends AsyncTask<String, String, JSONObject> {
         @Override
         protected JSONObject doInBackground(String... urls) {
@@ -180,5 +218,32 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+    */
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            AlertDialog.Builder alertDig = new AlertDialog.Builder(this);
+
+            alertDig.setMessage("종료 하시겠습니까??");
+            alertDig.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    System.exit(0);
+                }
+            });
+
+            alertDig.setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    dialog.cancel();
+                }
+            });
+
+            AlertDialog alert = alertDig.create();
+            alert.setTitle("뒤로가기 버튼 이벤트");
+            //alert.section(R.draw.ic_launcher);
+            alert.show();
+        }
+        return true;
     }
 }

@@ -4,10 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
     android:orientation="vertical"
-    tools:context=".profiles">
-
+    tools:context=".profiles2">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -85,4 +83,5 @@
             app:srcCompat="@drawable/ib_setting" />
 
     </LinearLayout>
+
 </LinearLayout>

@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import org.json.JSONObject;
 
@@ -22,12 +22,19 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class login extends AppCompatActivity {
 
     EditText login_id;
     EditText login_pw;
-    Button login_btn;
-    Button signup_btn;
+    ImageButton login_btn;
+    ImageButton signup_btn;
+    String extra_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +43,14 @@ public class login extends AppCompatActivity {
 
         login_id = (EditText) findViewById(R.id.login_id);
         login_pw = (EditText) findViewById(R.id.login_pw);
-        login_btn = (Button) findViewById(R.id.login_btn);
-        signup_btn = (Button) findViewById(R.id.signup_btn);
+        login_btn = (ImageButton) findViewById(R.id.login_btn);
+        signup_btn = (ImageButton) findViewById(R.id.signup_btn);
 
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new JSONTask().execute("http://54.180.32.249:3000/login");
+                //new JSONTask().execute("http://54.180.32.249:3000/login");
+                login();
             }
         });
         signup_btn.setOnClickListener(new View.OnClickListener() {
@@ -148,5 +156,39 @@ public class login extends AppCompatActivity {
                 //예외처리 result alert message
             }
         }
+    }
+    private void login() {
+        final String str_id = login_id.getText().toString();
+        extra_id = str_id;
+        Log.d("signup test", str_id);
+        final String str_pw = login_pw.getText().toString();
+
+        Req_login req_login = new Req_login(str_id, str_pw);
+        Retrofit retrofit =new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(ApiService.BASEURL)
+                .build();
+        ApiService apiService = retrofit.create(ApiService.class);
+        Call<Res_img> res = apiService.login(req_login);
+        //res = Net.getInstance().getApiService().join(user);
+        res.enqueue(new Callback<Res_img>() {
+            @Override
+            public void onResponse(Call<Res_img> call, Response<Res_img> response) {
+                if(response.isSuccessful()){
+                    if(response.body() != null) {
+                        if(response.body().getCode() == 1) {
+                            Intent intent_main = new Intent(login.this, MainActivity.class);
+                            intent_main.putExtra("user_id", extra_id);
+                            startActivity(intent_main);
+                            finish();
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Res_img> call, Throwable t) {
+
+            }
+        });
     }
 }

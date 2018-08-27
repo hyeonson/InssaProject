@@ -19,8 +19,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -45,12 +45,20 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 public class signup extends AppCompatActivity {
 
     ImageView image_select;
-    Bitmap photo;
-    Button signup_btn;
-    Button back_btn;
+    ImageButton signup_btn;
+    ImageButton back_btn;
     EditText signup_id;
     EditText signup_pw;
     EditText signup_pw2;
@@ -60,13 +68,14 @@ public class signup extends AppCompatActivity {
     Spinner signup_major;
     RadioGroup signup_sex;
     Spinner signup_grade;
+    boolean signup_fin = false;
+    File tempFile;
 
     private static final int PICK_FROM_CAMERA = 1;
     private static final int PICK_FROM_ALBUM = 2;
     private static final int CROP_FROM_CAMERA = 3;
 
     Uri photoUri;
-    private Uri mImageCaptureUri;
 
     private String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}; //권한 설정 변수
     private static final int MULTIPLE_PERMISSIONS = 101; //권한 동의 여부 문의 후 CallBack 함수에 쓰일 변수
@@ -78,8 +87,8 @@ public class signup extends AppCompatActivity {
         //checkPermissions();
 
         image_select = (ImageView) findViewById(R.id.image_select);
-        signup_btn = (Button)findViewById(R.id.signup_btn);
-        back_btn = (Button)findViewById(R.id.back_btn);
+        signup_btn = (ImageButton)findViewById(R.id.signup_btn);
+        back_btn = (ImageButton)findViewById(R.id.back_btn);
         signup_id = (EditText)findViewById(R.id.signup_id);
         signup_pw = (EditText)findViewById(R.id.signup_pw);
         signup_pw2 = (EditText)findViewById(R.id.signup_pw2);
@@ -110,7 +119,9 @@ public class signup extends AppCompatActivity {
         signup_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new JSONTask().execute("http://54.180.32.249:3000/signup");
+                signup_test();
+                imgUpload();
+                //new JSONTask().execute("http://54.180.32.249:3000/signup");
             }
         });
         back_btn.setOnClickListener(new View.OnClickListener() {
@@ -352,9 +363,7 @@ public class signup extends AppCompatActivity {
                 ByteArrayOutputStream bs = new ByteArrayOutputStream();
                 thumbImage.compress(Bitmap.CompressFormat.JPEG, 100, bs); //이미지가 클 경우 OutOfMemoryException 발생이 예상되어 압축
 
-
                 //여기서는 ImageView에 setImageBitmap을 활용하여 해당 이미지에 그림을 띄우시면 됩니다.
-
                 image_select.setImageBitmap(thumbImage);
             } catch (Exception e) {
                 Log.e("ERROR", e.getMessage().toString());
@@ -391,10 +400,10 @@ public class signup extends AppCompatActivity {
             }
 
             File folder = new File(Environment.getExternalStorageDirectory() + "/test/");
-            File tempFile = new File(folder.toString(), croppedFileName.getName());
-
+            tempFile = new File(folder.toString(), croppedFileName.getName());
             photoUri = FileProvider.getUriForFile(this,
                     "project.hs.inssaproject.provider", tempFile);
+            //Log.d("file uri", photoUri.toString());
 
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
@@ -413,8 +422,6 @@ public class signup extends AppCompatActivity {
 
             i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
             startActivityForResult(i, CROP_FROM_CAMERA);
-
-
         }
 
     }
@@ -455,4 +462,133 @@ public class signup extends AppCompatActivity {
                 .setNegativeButton("취소", cancelListener)
                 .show();
     }
+
+    private void imgUpload(){
+        Retrofit retrofit =new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(ApiService.BASEURL)
+                .build();
+        ApiService apiService = retrofit.create(ApiService.class);
+        //RequestBody photoBody = RequestBody.create(MediaType.parse("image/jpg"), tempFile);
+        //tempFile을 전역변수로
+
+        final String userID = signup_id.getText().toString();
+        MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", tempFile.getName(), RequestBody.create(MediaType.parse("image/*"), tempFile));
+        //tempFile.getName()
+        //MultipartBody.Part body = MultipartBody.Part.createFormData("picture", tempFile.getName(), photoBody);
+        //RequestBody description = RequestBody.create(MediaType.parse("text/plain"), filename); //multipart/form-data >>
+        //Call<Res_img> res = apiService.uploadAttachment(body, description);
+        //RequestBody description = RequestBody.create(okhttp3.MultipartBody.FORM, );
+        //RequestBody description = RequestBody.create(MediaType.parse("text/plain"), filename);
+        Call<Res_img> res = apiService.uploadAttachment(filePart,userID);
+        res.enqueue(new Callback<Res_img>() {
+            @Override
+            public void onResponse(Call<Res_img> call, Response<Res_img> response) {
+                Log.d("####################", "##################여기 까지 확인용################");
+                if(response.isSuccessful()){
+                    if(response.body() != null){
+                        Res_img res_img = response.body();
+                        Log.d("getCode", Integer.toString(res_img.getCode()));
+                        if(res_img.getCode() == 1){
+                            //Toast.makeText(this, "중복 체크 하세요.", Toast.LENGTH_SHORT).show();
+                            /*
+                            Intent intent_login = new Intent(signup.this, login.class);
+                            startActivity(intent_login);
+                            finish();
+                            */
+                        }
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<Res_img> call, Throwable t) {
+            }
+        });
+    }
+    private void signup_test() {
+
+        final String str_id = signup_id.getText().toString();
+        Log.d("signup test", str_id);
+        final String str_pw = signup_pw.getText().toString();
+        final String str_pw2 = signup_pw2.getText().toString();
+        final String str_name = signup_name.getText().toString();
+        final int int_age = Integer.parseInt(signup_age.getText().toString());
+        final String str_saying = signup_saying.getText().toString();
+        final String str_major = signup_major.getSelectedItem().toString();
+        final String str_sex = ((RadioButton)findViewById(signup_sex.getCheckedRadioButtonId())).getText().toString();
+        final int int_grade = Integer.parseInt(signup_grade.getSelectedItem().toString());
+
+        //Req_join req_join = new Req_join();
+        //req_join.setUser(new User(str_id, str_pw, str_name, int_age, str_saying, str_major, str_sex, int_grade));
+        User user = new User(str_id, str_pw, str_name, int_age, str_saying, str_major, str_sex, int_grade);
+
+        //Call<Res_join> call = apiService.join(req_join);
+
+        Retrofit retrofit =new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(ApiService.BASEURL)
+                .build();
+        ApiService apiService = retrofit.create(ApiService.class);
+        Call<Res_join> res = apiService.join(user);
+        //res = Net.getInstance().getApiService().join(user);
+        res.enqueue(new Callback<Res_join>() {
+            @Override
+            public void onResponse(Call<Res_join> call, Response<Res_join> response) {
+                if(response.isSuccessful()){
+                    if(response.body() != null) {
+                        Intent intent_login = new Intent(signup.this, login.class);
+                        startActivity(intent_login);
+                        finish();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Res_join> call, Throwable t) {
+
+            }
+        });
+        /*
+        call.enqueue(new Callback<Res_join>() {
+            @Override
+            public void onResponse(Call<Res_join> call, Response<Res_join> response) {
+                if (response.isSuccessful()) {
+                    Intent intent_login = new Intent(signup.this, login.class);
+                    startActivity(intent_login);
+                    finish();
+                }
+            }
+            @Override
+            public void onFailure(Call<Res_join> call, Throwable t) {
+                Log.e("업로드 실패", t.getLocalizedMessage());
+            }
+        });
+        */
+    }
+    /*
+    private void imgUpload() {
+        Retrofit retrofit =new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(ApiService.BASEURL)
+                .build();
+        ApiService apiService = retrofit.create(ApiService.class);
+        Call<JsonObject> call = apiService.getHourly(ApiService.APIKEY,1,latitude,longitude);
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(@NonNull Call<JsonObject> call, @NonNull Response<JsonObject> response) {
+                if (response.isSuccessful()){
+                    //날씨데이터를 받아옴
+                    JsonObject object = response.body();
+                    if (object != null) {
+                        //데이터가 null 이 아니라면 날씨 데이터를 텍스트뷰로 보여주기
+                        weather.setText(object.toString());
+                    }
+
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<JsonObject> call, @NonNull Throwable t) {
+            }
+        });
+    }
+    */
 }
+
+
