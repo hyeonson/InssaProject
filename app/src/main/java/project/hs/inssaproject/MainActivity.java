@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void numberSetting() {
 
-        final String str_id = user_id;
+        final String str_id = MainActivity.user_id;
 
         Req_number req_number = new Req_number(str_id);
         Retrofit retrofit =new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())

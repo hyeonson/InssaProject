@@ -50,10 +50,10 @@ public class profiles extends AppCompatActivity {
         btn_all = (ImageButton)findViewById(R.id.btn_all);
         btn_loving = (ImageButton)findViewById(R.id.btn_loving);
         allListView = (ListView)findViewById(R.id.allListView);
-        allListViewAdapter = new ListViewAdapter(this);
-        allListView.setAdapter(allListViewAdapter);
+        Log.d("static variable user_id", MainActivity.user_id);
 
         setAllList();
+
         /*
         imgView = findViewById(R.id.imgView);
         Thread thread = new Thread(){
@@ -87,6 +87,7 @@ public class profiles extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent_home = new Intent(profiles.this, MainActivity.class);
+                intent_home.putExtra("user_id", MainActivity.user_id);
                 startActivity(intent_home);
                 finish();
             }
@@ -141,6 +142,7 @@ public class profiles extends AppCompatActivity {
         });
     }
     private void setAllList(){
+        allListViewAdapter = new ListViewAdapter(this);
         Retrofit retrofit =new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(ApiService.BASEURL)
                 .build();
@@ -163,6 +165,7 @@ public class profiles extends AppCompatActivity {
                             Log.d("getUser_age()", Integer.toString(users.get(i).getUser_age()));
                             Log.d("getUser_grade()", Integer.toString(users.get(i).getUser_grade()));
                         }
+                        allListView.setAdapter(allListViewAdapter);
                         /*
                         for(int i = 0; i < res_size; i++){
                             User user = new User();
@@ -206,7 +209,7 @@ public class profiles extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
+            final ViewHolder holder;
             if (convertView == null) {
                 holder = new ViewHolder();
 
@@ -234,36 +237,50 @@ public class profiles extends AppCompatActivity {
                 */
             holder.profile_id.setText(mData.user_id);
             holder.profile_major.setText(mData.major);
-            holder.profile_age.setText(Integer.toString(mData.age));
             holder.profile_grade.setText(Integer.toString(mData.grade));
+            holder.profile_age.setText(Integer.toString(mData.age));
+
+            holder.profile_id.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    Intent intent_one_profile = new Intent(profiles.this, one_profile.class);
+                    intent_one_profile.putExtra("profile_id", holder.profile_id.getText().toString());
+                    startActivity(intent_one_profile);
+                    finish();
+                }
+            });
+
             return convertView;
         }
 
-        public void addItem(String _user_id, String _major, int _age, int _grade) {
+        public void addItem(String _user_id, String _major, int _grade, int _age) {
             profileListData addInfo = null;
-            addInfo = new profileListData();
-            addInfo.user_id = _user_id;
-            addInfo.major = _major;
-            addInfo.age = _age;
-            addInfo.grade = _grade;
+            addInfo = new profileListData(_user_id, _major, _grade, _age);
+            //addInfo.user_id = _user_id;
+            //addInfo.major = _major;
+            //addInfo.age = _age;
+            //addInfo.grade = _grade;
             mListData.add(addInfo);
         }
-
+        /*
         public void remove(int position) {
             mListData.remove(position);
             dataChange();
         }
+        */
             /*
             public void sort(){
                 Collections.sort(mListData, ListData.ALPHA_COMPARATOR);
                 dataChange();
             }
             */
-
+            /*
         public void dataChange() {
             allListViewAdapter.notifyDataSetChanged();
         }
+        */
     }
+
     ////////
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -274,4 +291,5 @@ public class profiles extends AppCompatActivity {
         }
         return true;
     }
+
 }
