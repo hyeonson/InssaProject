@@ -42,6 +42,9 @@ public interface ApiService {
     @POST("numberSetting")
     Call<Res_number> numberSetting(@Body Req_number req_number);
 
+    @POST("showProfile")
+    Call<User> showProfile(@Body Req_number req_number);
+
     @POST("allProfile")
     Call<List<User>> allProfile();
 

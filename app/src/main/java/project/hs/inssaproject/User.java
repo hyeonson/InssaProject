@@ -1,7 +1,6 @@
 package project.hs.inssaproject;
 
 public class User {
-
     String user_id;
     String user_pw;
     String user_name;
@@ -10,6 +9,7 @@ public class User {
     String user_major;
     String user_sex;
     int user_grade;
+    String user_img;
     public User(String _user_id, String _user_pw, String _user_name, int _user_age, String _user_saying, String _user_major, String _user_sex, int _user_grade){
         this.user_id = _user_id;
         this.user_pw = _user_pw;
@@ -29,6 +29,7 @@ public class User {
         this.user_major = null;
         this.user_sex = null;
         this.user_grade = 0;
+        this.user_img = null;
     }
     public String getUser_id() {
         return user_id;
@@ -92,6 +93,14 @@ public class User {
 
     public void setUser_grade(int user_grade) {
         this.user_grade = user_grade;
+    }
+
+    public String getUser_img() {
+        return user_img;
+    }
+
+    public void setUser_img(String user_img) {
+        this.user_sex = user_img;
     }
 
     @Override

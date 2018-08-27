@@ -5,15 +5,17 @@ import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v13.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -27,21 +29,11 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -84,7 +76,7 @@ public class signup extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        //checkPermissions();
+        checkPermissions();
 
         image_select = (ImageView) findViewById(R.id.image_select);
         signup_btn = (ImageButton)findViewById(R.id.signup_btn);
@@ -133,7 +125,7 @@ public class signup extends AppCompatActivity {
             }
         });
     }
-
+    /*
     public class JSONTask extends AsyncTask<String, String, String> {
 
         @Override
@@ -239,7 +231,8 @@ public class signup extends AppCompatActivity {
             }
         }
     }
-    /*
+    */
+
     private boolean checkPermissions() {
         int result;
         List<String> permissionList = new ArrayList<>();
@@ -255,10 +248,10 @@ public class signup extends AppCompatActivity {
         }
         return true;
     }
-    */
+
     //아래는 권한 요청 Callback 함수입니다. PERMISSION_GRANTED로 권한을 획득했는지 확인할 수 있습니다. 아래에서는 !=를 사용했기에
     //권한 사용에 동의를 안했을 경우를 if문으로 코딩되었습니다.
-    /*
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -288,14 +281,14 @@ public class signup extends AppCompatActivity {
             }
         }
     }
-    */
-    /*
+
+
     //권한 획득에 동의를 하지 않았을 경우 아래 Toast 메세지를 띄우며 해당 Activity를 종료시킵니다.
     private void showNoPermissionToastAndFinish() {
         Toast.makeText(this, "권한 요청에 동의 해주셔야 이용 가능합니다. 설정에서 권한 허용 하시기 바랍니다.", Toast.LENGTH_SHORT).show();
-        finish();
+        //finish();
     }
-    */
+
     private void takePhoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //사진을 찍기 위하여 설정합니다.
         File photoFile = null;
@@ -472,6 +465,7 @@ public class signup extends AppCompatActivity {
         //tempFile을 전역변수로
 
         final String userID = signup_id.getText().toString();
+        //File tempFile = new File(photoUri.getPath(),toString());
         MultipartBody.Part filePart = MultipartBody.Part.createFormData("file", tempFile.getName(), RequestBody.create(MediaType.parse("image/*"), tempFile));
         //tempFile.getName()
         //MultipartBody.Part body = MultipartBody.Part.createFormData("picture", tempFile.getName(), photoBody);

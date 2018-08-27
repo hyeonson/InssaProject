@@ -245,6 +245,7 @@ public class profiles extends AppCompatActivity {
                 public void onClick(View v){
                     Intent intent_one_profile = new Intent(profiles.this, one_profile.class);
                     intent_one_profile.putExtra("profile_id", holder.profile_id.getText().toString());
+                    Log.d("profile_id", holder.profile_id.getText().toString());
                     startActivity(intent_one_profile);
                     finish();
                 }
