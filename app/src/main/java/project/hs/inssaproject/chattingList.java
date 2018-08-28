@@ -233,7 +233,6 @@ public class chattingList extends AppCompatActivity {
                     finish();
                 }
             });
-
             return convertView;
         }
 
