@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent_home = new Intent(MainActivity.this, MainActivity.class);
+                intent_home.putExtra("user_id", MainActivity.user_id);
                 startActivity(intent_home);
                 finish();
             }
