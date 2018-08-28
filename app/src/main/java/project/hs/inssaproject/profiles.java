@@ -159,7 +159,7 @@ public class profiles extends AppCompatActivity {
                         List<User> users = response.body();
                         int res_size = response.body().size();
                         for(int i = 0; i < res_size; i++){
-                            if(MainActivity.user_id != users.get(i).getUser_id()) {
+                            if(!MainActivity.user_id.equals(users.get(i).getUser_id())) {
                                 allListViewAdapter.addItem(users.get(i).getUser_id(), users.get(i).getUser_major(), users.get(i).getUser_grade(), users.get(i).getUser_age());
                                 Log.d("getUser_id()", users.get(i).getUser_id());
                                 Log.d("getUser_major()", users.get(i).getUser_major());
