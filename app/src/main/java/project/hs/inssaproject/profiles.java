@@ -159,11 +159,13 @@ public class profiles extends AppCompatActivity {
                         List<User> users = response.body();
                         int res_size = response.body().size();
                         for(int i = 0; i < res_size; i++){
-                            allListViewAdapter.addItem(users.get(i).getUser_id(), users.get(i).getUser_major(), users.get(i).getUser_grade(), users.get(i).getUser_age());
-                            Log.d("getUser_id()", users.get(i).getUser_id());
-                            Log.d("getUser_major()", users.get(i).getUser_major());
-                            Log.d("getUser_age()", Integer.toString(users.get(i).getUser_age()));
-                            Log.d("getUser_grade()", Integer.toString(users.get(i).getUser_grade()));
+                            if(MainActivity.user_id != users.get(i).getUser_id()) {
+                                allListViewAdapter.addItem(users.get(i).getUser_id(), users.get(i).getUser_major(), users.get(i).getUser_grade(), users.get(i).getUser_age());
+                                Log.d("getUser_id()", users.get(i).getUser_id());
+                                Log.d("getUser_major()", users.get(i).getUser_major());
+                                Log.d("getUser_age()", Integer.toString(users.get(i).getUser_age()));
+                                Log.d("getUser_grade()", Integer.toString(users.get(i).getUser_grade()));
+                            }
                         }
                         allListView.setAdapter(allListViewAdapter);
                         /*
@@ -246,6 +248,7 @@ public class profiles extends AppCompatActivity {
                 public void onClick(View v){
                     Intent intent_one_profile = new Intent(profiles.this, one_profile.class);
                     intent_one_profile.putExtra("profile_id", tmp_id);
+                    intent_one_profile.putExtra("type", "all");
                     Log.d("profile_id", holder.profile_id.getText().toString());
                     startActivity(intent_one_profile);
                     finish();

@@ -51,12 +51,21 @@ public interface ApiService {
     @POST("likeYou")
     Call<Res_img> likeYou(@Body Req_likeyou req_likeyou);
 
+    @POST("likeYou2")
+    Call<Res_img> likeYou2(@Body Req_likeyou req_likeyou);
+
     @POST("likeYouList")
     Call<Res_string> likeYouList(@Body Req_number req_number);
     //Call<Res_string> likeYouList(@Body Req_number req_number);
 
     @POST("likeYouList2")
     Call<User> likeYouList2(@Body Req_number req_number);
+
+    @POST("matchedList")
+    Call<Res_string> matchedList(@Body Req_number req_number);
+
+    @POST("matchedList2")
+    Call<User> matchedList2(@Body Req_number req_number);
 
     @Multipart
     @POST("imgUpload/{userID}")

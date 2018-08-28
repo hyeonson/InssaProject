@@ -36,6 +36,7 @@ public class one_profile extends AppCompatActivity {
     Button btn_loving;
     Intent intent;
     String show_id;
+    String likeType;
     Bitmap bm;
 
     @Override
@@ -45,6 +46,7 @@ public class one_profile extends AppCompatActivity {
 
         intent = getIntent();
         show_id = intent.getStringExtra("profile_id");
+        likeType = intent.getStringExtra("type");
         Log.d("test_profile_id", show_id);
         profile_id = (TextView)findViewById(R.id.profile_id);
         profile_name = (TextView)findViewById(R.id.profile_name);
@@ -68,7 +70,8 @@ public class one_profile extends AppCompatActivity {
         btn_loving.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                likeYou();
+                if(likeType.equals("all")) likeYou();
+                else likeYou2();
             }
         });
         showProfile();
@@ -163,4 +166,33 @@ public class one_profile extends AppCompatActivity {
             }
         });
     }
+
+    private void likeYou2(){
+        final String str_id = MainActivity.user_id;
+        final String str_id2 = show_id;
+        Req_likeyou req_likeyou = new Req_likeyou(str_id2, str_id);
+        Retrofit retrofit =new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(ApiService.BASEURL)
+                .build();
+        ApiService apiService = retrofit.create(ApiService.class);
+        Call<Res_img> res = apiService.likeYou2(req_likeyou);
+        res.enqueue(new Callback<Res_img>() {
+            @Override
+            public void onResponse(Call<Res_img> call, Response<Res_img> response) {
+                if(response.isSuccessful()){
+                    if(response.body() != null) {
+                        Intent intent_profiles = new Intent(one_profile.this, profiles.class);
+                        startActivity(intent_profiles);
+                        finish();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Res_img> call, Throwable t) {
+
+            }
+        });
+    }
+
 }

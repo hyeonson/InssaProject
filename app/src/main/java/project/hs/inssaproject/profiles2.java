@@ -35,7 +35,6 @@ public class profiles2 extends AppCompatActivity {
     ImageButton btn_loving;
     ListView allListView2 = null;
     ListViewAdapter allListViewAdapter2 = null;
-    int userSize;
     List userIDs;
 
     //ImageView imgView;
@@ -58,11 +57,14 @@ public class profiles2 extends AppCompatActivity {
         userIDs = new ArrayList();
 
         setAllList();
-
+        //allListViewAdapter2 = new ListViewAdapter(this);
+        /*
         for(int i = 0; i < userIDs.size(); i++){
             setAllList2(userIDs.get(i).toString());
         }
-        allListView2.setAdapter(allListViewAdapter2);
+
+        */
+        //allListViewAdapter2.dataChange();
         /*
         imgView = findViewById(R.id.imgView);
         Thread thread = new Thread(){
@@ -151,6 +153,7 @@ public class profiles2 extends AppCompatActivity {
         });
     }
     private void setAllList(){
+        allListViewAdapter2 = new ListViewAdapter(this);
         Retrofit retrofit =new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(ApiService.BASEURL)
                 .build();
@@ -173,6 +176,11 @@ public class profiles2 extends AppCompatActivity {
                             String temp_id = recordToken.nextToken();
                             userIDs.add(temp_id);
                         }
+
+                        for(int i = 0; i < userIDs.size(); i++){
+                            setAllList2(userIDs.get(i).toString());
+                        }
+                        allListView2.setAdapter(allListViewAdapter2);
                     }
                 }
             }
@@ -186,7 +194,6 @@ public class profiles2 extends AppCompatActivity {
     ////////
 
     private void setAllList2(String temp_user_id){
-        allListViewAdapter2 = new ListViewAdapter(this);
         Retrofit retrofit =new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
                 .baseUrl(ApiService.BASEURL)
                 .build();
@@ -202,6 +209,7 @@ public class profiles2 extends AppCompatActivity {
                         Log.d("response.body()3", response.body().toString());
                         User user = response.body();
                         allListViewAdapter2.addItem(user.getUser_id(), user.getUser_major(), user.getUser_grade(), user.getUser_age());
+                        allListViewAdapter2.dataChange();
                         Log.d("getUser_id()", user.getUser_id());
                         Log.d("getUser_major()", user.getUser_major());
                         Log.d("getUser_age()", Integer.toString(user.getUser_age()));
@@ -280,6 +288,7 @@ public class profiles2 extends AppCompatActivity {
                 public void onClick(View v){
                     Intent intent_one_profile = new Intent(profiles2.this, one_profile.class);
                     intent_one_profile.putExtra("profile_id", tmp_id);
+                    intent_one_profile.putExtra("type", "loved");
                     Log.d("profile_id", holder.profile_id.getText().toString());
                     startActivity(intent_one_profile);
                     finish();
@@ -310,11 +319,9 @@ public class profiles2 extends AppCompatActivity {
                 dataChange();
             }
             */
-            /*
         public void dataChange() {
-            allListViewAdapter.notifyDataSetChanged();
+            allListViewAdapter2.notifyDataSetChanged();
         }
-        */
     }
 
     ////////

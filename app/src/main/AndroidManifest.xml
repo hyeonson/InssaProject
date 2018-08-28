@@ -44,7 +44,8 @@
         <activity android:name=".board" />
         <activity android:name=".setting" />
         <activity android:name=".profiles2" />
-        <activity android:name=".one_profile"></activity>
+        <activity android:name=".one_profile" />
+        <activity android:name=".chatting"></activity>
     </application>
 
 </manifest>
