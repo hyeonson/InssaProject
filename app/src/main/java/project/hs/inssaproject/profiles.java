@@ -54,12 +54,10 @@ public class profiles extends AppCompatActivity {
         btn_loving = (ImageButton)findViewById(R.id.btn_loving);
         allListView = (ListView)findViewById(R.id.allListView);
         Log.d("static variable user_id", MainActivity.user_id);
-        getLM();
 
         //예외처리 해야한다
-
-        setAllList();
-
+        getLM();
+        //allListViewAdapter.dataChange();
         /*
         imgView = findViewById(R.id.imgView);
         Thread thread = new Thread(){
@@ -159,6 +157,7 @@ public class profiles extends AppCompatActivity {
             public void onResponse(Call<List<User>> call, Response<List<User>> response) {
                 if(response.isSuccessful()){
                     if(response.body() != null) {
+                        //getLM();
                         Log.d("####response.body()###", "여길봐");
                         Log.d("response.body()", response.body().toString());
                         Log.d("response.body.size()", Integer.toString(response.body().size()));
@@ -166,23 +165,31 @@ public class profiles extends AppCompatActivity {
                         int res_size = response.body().size();
                         for(int i = 0; i < res_size; i++){
                             boolean isGood = true;
-                            if(!MainActivity.user_id.equals(users.get(i).getUser_id())) { //일단 자기 자신 거르고
-                                StringTokenizer recordToken1 = new StringTokenizer(lovedList, "$");
-                                while(recordToken1.hasMoreTokens()){
-                                    String temp_id = recordToken1.nextToken();
-                                    if(temp_id.equals(users.get(i).getUser_id())){
-                                        isGood = false;
+                            if(!MainActivity.user_id.equals(users.get(i).getUser_id())) {
+                                //일단 자기 자신 거르고
+                                if(lovedList != "") {
+                                    StringTokenizer recordToken1 = new StringTokenizer(lovedList, "$");
+                                    while (recordToken1.hasMoreTokens()) {
+                                        String temp_id = recordToken1.nextToken();
+                                        Log.d("token으로 temp_Id", temp_id);
+                                        if (temp_id.equals(users.get(i).getUser_id())) {
+                                            isGood = false;
+                                        }
                                     }
                                 }
-                                StringTokenizer recordToken2 = new StringTokenizer(matchedList, "$");
-                                while(recordToken2.hasMoreTokens()){
-                                    String temp_id = recordToken2.nextToken();
-                                    if(temp_id.equals(users.get(i).getUser_id())){
-                                        isGood = false;
+                                if (matchedList != null) {
+                                    StringTokenizer recordToken2 = new StringTokenizer(matchedList, "$");
+                                    while(recordToken2.hasMoreTokens()){
+                                        String temp_id = recordToken2.nextToken();
+                                        Log.d("token2으로 temp_id", temp_id);
+                                        if(temp_id.equals(users.get(i).getUser_id())){
+                                            isGood = false;
+                                        }
                                     }
                                 }
                                 if(isGood) {
                                     allListViewAdapter.addItem(users.get(i).getUser_id(), users.get(i).getUser_major(), users.get(i).getUser_grade(), users.get(i).getUser_age());
+                                    allListViewAdapter.dataChange();
                                     Log.d("getUser_id()", users.get(i).getUser_id());
                                     Log.d("getUser_major()", users.get(i).getUser_major());
                                     Log.d("getUser_age()", Integer.toString(users.get(i).getUser_age()));
@@ -222,6 +229,7 @@ public class profiles extends AppCompatActivity {
                         Log.d("response.body()", response.body().toString());
                         lovedList = response.body().user_loved;
                         matchedList = response.body().user_matched;
+                        setAllList();
                         /*
                         for(int i = 0; i < res_size; i++){
                             User user = new User();
@@ -366,11 +374,11 @@ public class profiles extends AppCompatActivity {
                 dataChange();
             }
             */
-            /*
+
         public void dataChange() {
             allListViewAdapter.notifyDataSetChanged();
         }
-        */
+
     }
 
     ////////

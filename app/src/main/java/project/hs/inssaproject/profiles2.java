@@ -57,8 +57,10 @@ public class profiles2 extends AppCompatActivity {
         allListView2 = (ListView)findViewById(R.id.allListView2);
 
         userIDs = new ArrayList();
-
-        setAllList();
+        getLM();
+        //allListViewAdapter2.dataChange();
+        //setAllList();
+        //allListViewAdapter2.dataChange();
         //allListViewAdapter2 = new ListViewAdapter(this);
         /*
         for(int i = 0; i < userIDs.size(); i++){
@@ -168,12 +170,12 @@ public class profiles2 extends AppCompatActivity {
             public void onResponse(Call<Res_string> call, Response<Res_string> response) {
                 if(response.isSuccessful()){
                     if(response.body() != null) {
+                        //getLM();
                         Log.d("####response.body2()###", "여길봐2");
                         Log.d("response.body()2", response.body().toString());
                         String userList = response.body().getList_id();
                         Log.d("userList", userList);
                         StringTokenizer recordToken = new StringTokenizer(userList, "$");
-
                         while(recordToken.hasMoreTokens()){
                             String temp_id = recordToken.nextToken();
                             userIDs.add(temp_id);
@@ -210,12 +212,15 @@ public class profiles2 extends AppCompatActivity {
                         Log.d("####response.body()3###", "여길봐3");
                         Log.d("response.body()3", response.body().toString());
                         User user = response.body();
+
                         boolean isGood = true;
-                        StringTokenizer recordToken1 = new StringTokenizer(lovedList, "$");
-                        while(recordToken1.hasMoreTokens()){
-                            String temp_id = recordToken1.nextToken();
-                            if(temp_id.equals(user.getUser_id())){
-                                isGood = false;
+                        if(matchedList != null) {
+                            StringTokenizer recordToken1 = new StringTokenizer(matchedList, "$");
+                            while (recordToken1.hasMoreTokens()) {
+                                String temp_id = recordToken1.nextToken();
+                                if (temp_id.equals(user.getUser_id())) {
+                                    isGood = false;
+                                }
                             }
                         }
                         if(isGood) {
@@ -385,6 +390,7 @@ public class profiles2 extends AppCompatActivity {
                         Log.d("response.body()", response.body().toString());
                         lovedList = response.body().user_loved;
                         matchedList = response.body().user_matched;
+                        setAllList();
                         /*
                         for(int i = 0; i < res_size; i++){
                             User user = new User();
