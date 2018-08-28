@@ -45,7 +45,7 @@ public class one_profile extends AppCompatActivity {
 
         intent = getIntent();
         show_id = intent.getStringExtra("profile_id");
-
+        Log.d("test_profile_id", show_id);
         profile_id = (TextView)findViewById(R.id.profile_id);
         profile_name = (TextView)findViewById(R.id.profile_name);
         profile_age = (TextView)findViewById(R.id.profile_age);
@@ -65,6 +65,13 @@ public class one_profile extends AppCompatActivity {
                 finish();
             }
         });
+        btn_loving.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                likeYou();
+            }
+        });
+        showProfile();
 
     }
     private void showProfile() {
@@ -91,6 +98,7 @@ public class one_profile extends AppCompatActivity {
                         profile_sex.setText(user.getUser_sex());
                         profile_saying.setText(user.getUser_saying());
                         profile_major.setText(user.getUser_major());
+
                         final String tmpUser_img = user.getUser_img();
                         Thread thread = new Thread(){
                             @Override
@@ -124,6 +132,33 @@ public class one_profile extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
+
+            }
+        });
+    }
+    private void likeYou(){
+        final String str_id = MainActivity.user_id;
+        final String str_id2 = show_id;
+        Req_likeyou req_likeyou = new Req_likeyou(str_id2, str_id);
+        Retrofit retrofit =new Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(ApiService.BASEURL)
+                .build();
+        ApiService apiService = retrofit.create(ApiService.class);
+        Call<Res_img> res = apiService.likeYou(req_likeyou);
+        res.enqueue(new Callback<Res_img>() {
+            @Override
+            public void onResponse(Call<Res_img> call, Response<Res_img> response) {
+                if(response.isSuccessful()){
+                    if(response.body() != null) {
+                        Intent intent_profiles = new Intent(one_profile.this, profiles.class);
+                        startActivity(intent_profiles);
+                        finish();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Res_img> call, Throwable t) {
 
             }
         });

@@ -159,7 +159,7 @@ public class profiles extends AppCompatActivity {
                         List<User> users = response.body();
                         int res_size = response.body().size();
                         for(int i = 0; i < res_size; i++){
-                            allListViewAdapter.addItem(users.get(i).getUser_id(), users.get(i).getUser_major(), users.get(i).getUser_age(), users.get(i).getUser_grade());
+                            allListViewAdapter.addItem(users.get(i).getUser_id(), users.get(i).getUser_major(), users.get(i).getUser_grade(), users.get(i).getUser_age());
                             Log.d("getUser_id()", users.get(i).getUser_id());
                             Log.d("getUser_major()", users.get(i).getUser_major());
                             Log.d("getUser_age()", Integer.toString(users.get(i).getUser_age()));
@@ -236,6 +236,7 @@ public class profiles extends AppCompatActivity {
                 }
                 */
             holder.profile_id.setText(mData.user_id);
+            final String tmp_id = mData.user_id;
             holder.profile_major.setText(mData.major);
             holder.profile_grade.setText(Integer.toString(mData.grade));
             holder.profile_age.setText(Integer.toString(mData.age));
@@ -244,7 +245,7 @@ public class profiles extends AppCompatActivity {
                 @Override
                 public void onClick(View v){
                     Intent intent_one_profile = new Intent(profiles.this, one_profile.class);
-                    intent_one_profile.putExtra("profile_id", holder.profile_id.getText().toString());
+                    intent_one_profile.putExtra("profile_id", tmp_id);
                     Log.d("profile_id", holder.profile_id.getText().toString());
                     startActivity(intent_one_profile);
                     finish();
@@ -286,8 +287,9 @@ public class profiles extends AppCompatActivity {
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Intent intent_munu = new Intent(profiles.this, MainActivity.class);
-            startActivity(intent_munu);
+            Intent intent_home = new Intent(profiles.this, MainActivity.class);
+            intent_home.putExtra("user_id", MainActivity.user_id);
+            startActivity(intent_home);
             finish();
         }
         return true;

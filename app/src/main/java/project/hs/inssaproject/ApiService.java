@@ -48,6 +48,16 @@ public interface ApiService {
     @POST("allProfile")
     Call<List<User>> allProfile();
 
+    @POST("likeYou")
+    Call<Res_img> likeYou(@Body Req_likeyou req_likeyou);
+
+    @POST("likeYouList")
+    Call<Res_string> likeYouList(@Body Req_number req_number);
+    //Call<Res_string> likeYouList(@Body Req_number req_number);
+
+    @POST("likeYouList2")
+    Call<User> likeYouList2(@Body Req_number req_number);
+
     @Multipart
     @POST("imgUpload/{userID}")
     Call<Res_img> uploadAttachment(@Part MultipartBody.Part file, @Path("userID") String userID);//@Part("description") RequestBody description);@Path("filename") String filename);//, @Part("name") RequestBody description);

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/background"
     tools:context=".profiles2">
 
     <LinearLayout
@@ -37,7 +38,7 @@
 
 
         <ListView
-            android:id="@+id/allListView"
+            android:id="@+id/allListView2"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
