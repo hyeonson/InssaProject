@@ -75,6 +75,10 @@ public class one_profile extends AppCompatActivity {
             }
         });
         showProfile();
+        /*
+        if(likeType.equals("all")) btn_loving >> 좋아요
+        else >> 나도 좋아요 글이든 그림이든
+        */
 
     }
     private void showProfile() {

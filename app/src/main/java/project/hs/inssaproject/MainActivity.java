@@ -241,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
             AlertDialog alert = alertDig.create();
-            alert.setTitle("뒤로가기 버튼 이벤트");
+            alert.setTitle("정말..");
             //alert.section(R.draw.ic_launcher);
             alert.show();
         }
