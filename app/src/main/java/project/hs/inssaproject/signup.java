@@ -298,7 +298,8 @@ public class signup extends AppCompatActivity {
         try {
             photoFile = createImageFile();
         } catch (IOException e) {
-            Toast.makeText(this, "이미지 처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();              finish();
+            Toast.makeText(this, "이미지 처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            finish();
         }
         if (photoFile != null) {
             photoUri = FileProvider.getUriForFile(this,
