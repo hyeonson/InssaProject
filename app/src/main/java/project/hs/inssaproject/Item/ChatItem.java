@@ -1,4 +1,4 @@
-package project.hs.inssaproject;
+package project.hs.inssaproject.Item;
 
 public class ChatItem {
     String sender;

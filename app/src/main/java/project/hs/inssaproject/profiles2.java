@@ -19,6 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import project.hs.inssaproject.Data.User;
+import project.hs.inssaproject.Data.profileListData;
+import project.hs.inssaproject.Network.ApiService;
+import project.hs.inssaproject.Request.Req_number;
+import project.hs.inssaproject.Response.Res_lm;
+import project.hs.inssaproject.Response.Res_string;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -164,7 +170,7 @@ public class profiles2 extends AppCompatActivity {
         ApiService apiService = retrofit.create(ApiService.class);
         Req_number req_number = new Req_number(MainActivity.user_id);
         Call<Res_string> res = apiService.likeYouList(req_number);
-        Log.d("respon2", req_number.user_id);
+        Log.d("respon2", req_number.getUser_id());
         res.enqueue(new Callback<Res_string>() {
             @Override
             public void onResponse(Call<Res_string> call, Response<Res_string> response) {
@@ -294,11 +300,11 @@ public class profiles2 extends AppCompatActivity {
                     holder.mIcon.setVisibility(View.GONE);
                 }
                 */
-            holder.profile_id.setText(mData.user_id);
-            final String tmp_id = mData.user_id;
-            holder.profile_major.setText(mData.major);
-            holder.profile_grade.setText(Integer.toString(mData.grade));
-            holder.profile_age.setText(Integer.toString(mData.age));
+            holder.profile_id.setText(mData.getUser_id());
+            final String tmp_id = mData.getUser_id();
+            holder.profile_major.setText(mData.getMajor());
+            holder.profile_grade.setText(Integer.toString(mData.getGrade()));
+            holder.profile_age.setText(Integer.toString(mData.getAge()));
 
             holder.profile_id.setOnClickListener(new View.OnClickListener(){
                 @Override
@@ -388,8 +394,8 @@ public class profiles2 extends AppCompatActivity {
                 if(response.isSuccessful()){
                     if(response.body() != null) {
                         Log.d("response.body()", response.body().toString());
-                        lovedList = response.body().user_loved;
-                        matchedList = response.body().user_matched;
+                        lovedList = response.body().getUser_loved();
+                        matchedList = response.body().getUser_matched();
                         setAllList();
                         /*
                         for(int i = 0; i < res_size; i++){

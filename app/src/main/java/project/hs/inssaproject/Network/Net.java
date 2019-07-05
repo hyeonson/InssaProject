@@ -1,4 +1,4 @@
-package project.hs.inssaproject;
+package project.hs.inssaproject.Network;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

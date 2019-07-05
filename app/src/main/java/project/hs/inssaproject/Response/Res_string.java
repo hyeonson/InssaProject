@@ -1,4 +1,4 @@
-package project.hs.inssaproject;
+package project.hs.inssaproject.Response;
 
 public class Res_string {
     String list_id;

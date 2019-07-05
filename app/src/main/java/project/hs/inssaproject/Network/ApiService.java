@@ -1,8 +1,17 @@
-package project.hs.inssaproject;
+package project.hs.inssaproject.Network;
 
 import java.util.List;
 
 import okhttp3.MultipartBody;
+import project.hs.inssaproject.Request.Req_likeyou;
+import project.hs.inssaproject.Request.Req_login;
+import project.hs.inssaproject.Request.Req_number;
+import project.hs.inssaproject.Response.Res_img;
+import project.hs.inssaproject.Response.Res_join;
+import project.hs.inssaproject.Response.Res_lm;
+import project.hs.inssaproject.Response.Res_number;
+import project.hs.inssaproject.Response.Res_string;
+import project.hs.inssaproject.Data.User;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Multipart;
@@ -12,27 +21,7 @@ import retrofit2.http.Path;
 
 public interface ApiService {
     static final String BASEURL  = "http://54.180.32.249:3000";
-    //POST 메소드를 통한 http rest api통신
-    //Call<받아올 데이터의 형태> 메소드명 (@Header("정의하고 싶은 속성 이름") 자료형 변수명,
-    //
-    //@Query("변수 이름") 자료형 변수명);
-    //
-    //
-    //
-    //출처: http://www.feelteller.com/6 [김정헌의 안드로이드 코딩 여행기]
-    /*
 
-    @POST("signup_test")
-    Call<User> signupAttachment(@Query("user_id") String user_id,
-                                        @Query("user_pw") String user_pw,
-                                        @Query("user_name") String user_name,
-                                        @Query("user_age") int user_age,
-                                        @Query("user_saying") String user_saying,
-                                        @Query("user_major") String user_major,
-                                        @Query("user_sex") String user_sex,
-                                        @Query("user_grade") int user_grade
-                                        );
-    */
     @POST("signup_test")
     Call<Res_join> join(@Body User user); //보낼때는 Req로 보내고 받을 때는 Res로 받음.
 

@@ -18,6 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import project.hs.inssaproject.Data.User;
+import project.hs.inssaproject.Data.profileListData;
+import project.hs.inssaproject.Network.ApiService;
+import project.hs.inssaproject.Request.Req_number;
+import project.hs.inssaproject.Response.Res_string;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -100,7 +105,7 @@ public class chattingList extends AppCompatActivity {
         ApiService apiService = retrofit.create(ApiService.class);
         Req_number req_number = new Req_number(MainActivity.user_id);
         Call<Res_string> res = apiService.matchedList(req_number);
-        Log.d("response4", req_number.user_id);
+        Log.d("response4", req_number.getUser_id());
         res.enqueue(new Callback<Res_string>() {
             @Override
             public void onResponse(Call<Res_string> call, Response<Res_string> response) {
@@ -217,11 +222,11 @@ public class chattingList extends AppCompatActivity {
                     holder.mIcon.setVisibility(View.GONE);
                 }
                 */
-            holder.profile_id.setText(mData.user_id);
-            final String tmp_id = mData.user_id;
-            holder.profile_major.setText(mData.major);
-            holder.profile_grade.setText(Integer.toString(mData.grade));
-            holder.profile_age.setText(Integer.toString(mData.age));
+            holder.profile_id.setText(mData.getUser_id());
+            final String tmp_id = mData.getUser_id();
+            holder.profile_major.setText(mData.getMajor());
+            holder.profile_grade.setText(Integer.toString(mData.getGrade()));
+            holder.profile_age.setText(Integer.toString(mData.getAge()));
 
             holder.profile_id.setOnClickListener(new View.OnClickListener(){
                 @Override

@@ -22,6 +22,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import project.hs.inssaproject.Item.ChatItem;
+
 public class chatting extends AppCompatActivity {
     //자신의 아이디 : MainActivity.user_id
     public String my_id=MainActivity.user_id;

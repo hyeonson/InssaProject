@@ -1,4 +1,4 @@
-package project.hs.inssaproject;
+package project.hs.inssaproject.Data;
 
 public class User {
     String user_id;

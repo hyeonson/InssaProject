@@ -18,6 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import project.hs.inssaproject.Data.User;
+import project.hs.inssaproject.Data.profileListData;
+import project.hs.inssaproject.Network.ApiService;
+import project.hs.inssaproject.Request.Req_number;
+import project.hs.inssaproject.Response.Res_lm;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -227,8 +232,8 @@ public class profiles extends AppCompatActivity {
                 if(response.isSuccessful()){
                     if(response.body() != null) {
                         Log.d("response.body()", response.body().toString());
-                        lovedList = response.body().user_loved;
-                        matchedList = response.body().user_matched;
+                        lovedList = response.body().getUser_loved();
+                        matchedList = response.body().getUser_matched();
                         setAllList();
                         /*
                         for(int i = 0; i < res_size; i++){
@@ -298,11 +303,11 @@ public class profiles extends AppCompatActivity {
                     holder.mIcon.setVisibility(View.GONE);
                 }
                 */
-            holder.profile_id.setText(mData.user_id);
-            final String tmp_id = mData.user_id;
-            holder.profile_major.setText(mData.major);
-            holder.profile_grade.setText(Integer.toString(mData.grade));
-            holder.profile_age.setText(Integer.toString(mData.age));
+            holder.profile_id.setText(mData.getUser_id());
+            final String tmp_id = mData.getUser_id();
+            holder.profile_major.setText(mData.getMajor());
+            holder.profile_grade.setText(Integer.toString(mData.getGrade()));
+            holder.profile_age.setText(Integer.toString(mData.getAge()));
 
             holder.profile_id.setOnClickListener(new View.OnClickListener(){
                 @Override

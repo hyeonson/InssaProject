@@ -17,6 +17,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import project.hs.inssaproject.Data.User;
+import project.hs.inssaproject.Network.ApiService;
+import project.hs.inssaproject.Request.Req_likeyou;
+import project.hs.inssaproject.Request.Req_number;
+import project.hs.inssaproject.Response.Res_img;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
